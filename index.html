@@ -3,35 +3,162 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Registro y Recuperación</title>
+<title>Registro e Inicio de Sesión</title>
 <style>
-body { margin: 0; font-family: Arial, sans-serif; background: linear-gradient(135deg, #f5f7fa, #c3cfe2); display: flex; justify-content: center; align-items: center; min-height: 100vh; flex-direction: column; }
-.login-box { background: white; padding: 40px; border-radius: 20px; box-shadow: 0 8px 20px rgba(0,0,0,0.1); width: 100%; max-width: 380px; text-align: center; margin-bottom: 20px; }
-.login-box h2 { margin-bottom: 5px; }
-.login-box p { margin-top: 0; color: #666; font-size: 14px; }
-.login-box input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 10px; }
-.login-box button { width: 100%; padding: 12px; background: #4285F4; border: none; border-radius: 10px; color: white; cursor: pointer; margin-top: 10px; }
-.extra { margin-top: 15px; font-size: 13px; color: #666; }
-.extra a { color: #4285F4; text-decoration: none; cursor: pointer; }
-.extra a:hover { text-decoration: underline; }
+/* Fondo con imagen difuminada */
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: url("https://images.unsplash.com/photo-1508780709619-79562169bc64?auto=format&fit=crop&w=1600&q=80") no-repeat center center/cover;
+  position: relative;
+}
+
+body::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.5);
+  backdrop-filter: blur(6px);
+}
+
+/* Caja de login */
+.container {
+  position: relative;
+  z-index: 2;
+  background: rgba(255,255,255,0.9);
+  padding: 40px;
+  border-radius: 20px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.25);
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+  animation: fadeIn 1.2s ease-in-out;
+}
+
+/* Animación de entrada */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Encabezado de pestañas */
+.tabs {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 20px;
+}
+
+.tabs button {
+  flex: 1;
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
+  background: #eee;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+.tabs button.active {
+  background: #4285F4;
+  color: white;
+  box-shadow: 0 4px 15px rgba(66,133,244,0.4);
+}
+
+/* Inputs */
+.container input {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  outline: none;
+  transition: 0.3s;
+}
+
+.container input:focus {
+  border-color: #4285F4;
+  box-shadow: 0 0 8px rgba(66,133,244,0.3);
+}
+
+/* Botones */
+.container button.submit-btn {
+  width: 100%;
+  padding: 12px;
+  background: #4285F4;
+  border: none;
+  border-radius: 10px;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: 0.3s;
+}
+
+.container button.submit-btn:hover {
+  background: #3367D6;
+  transform: scale(1.05);
+}
+
+/* Extra links */
+.extra {
+  margin-top: 15px;
+  font-size: 13px;
+  color: #555;
+}
+
+.extra a {
+  color: #4285F4;
+  text-decoration: none;
+}
+
+.extra a:hover {
+  text-decoration: underline;
+}
 
 /* Tabla estilo Excel */
-#historialContainer { display: none; margin-top: 20px; width: 90%; max-width: 800px; overflow-x: auto; }
-#historialContainer table { width: 100%; border-collapse: collapse; }
-#historialContainer th, #historialContainer td { border: 1px solid #ccc; padding: 10px; text-align: left; }
-#historialContainer th { background: #4285F4; color: white; }
-#historialContainer tr:nth-child(even) { background: #f0f0f0; }
+#historialContainer {
+  display: none;
+  margin-top: 20px;
+  width: 90%;
+  max-width: 800px;
+  overflow-x: auto;
+}
+#historialContainer table {
+  width: 100%;
+  border-collapse: collapse;
+}
+#historialContainer th, #historialContainer td {
+  border: 1px solid #ccc;
+  padding: 10px;
+  text-align: left;
+}
+#historialContainer th {
+  background: #4285F4;
+  color: white;
+}
+#historialContainer tr:nth-child(even) {
+  background: #f0f0f0;
+}
 </style>
 </head>
 <body>
 
-<div class="login-box">
-  <h2>Regístrate</h2>
-  <p>Bienvenido, ingresa tus datos</p>
+<div class="container">
+  <div class="tabs">
+    <button id="tabRegister" class="active">Regístrate</button>
+    <button id="tabLogin">Inicia sesión</button>
+  </div>
+
+  <h2 id="formTitle">Bienvenido</h2>
   <form id="loginForm">
     <input type="email" name="email" placeholder="Correo electrónico" required>
     <input type="password" name="password" placeholder="Contraseña" required>
-    <button type="submit">Ingresar</button>
+    <button type="submit" class="submit-btn">Continuar</button>
   </form>
 
   <div class="extra">
@@ -39,7 +166,7 @@ body { margin: 0; font-family: Arial, sans-serif; background: linear-gradient(13
   </div>
 </div>
 
-<!-- Contenedor oculto para historial tipo Excel -->
+<!-- Historial -->
 <div id="historialContainer">
   <h2>Historial de Datos Registrados</h2>
   <table>
@@ -61,37 +188,42 @@ const recoverLink = document.getElementById('recoverLink');
 const historialContainer = document.getElementById('historialContainer');
 const historialTableBody = document.getElementById('historialTableBody');
 
-// Guardar datos y redirigir al enviar el formulario
+// Tabs
+const tabRegister = document.getElementById('tabRegister');
+const tabLogin = document.getElementById('tabLogin');
+const formTitle = document.getElementById('formTitle');
+
+tabRegister.addEventListener('click', () => {
+  tabRegister.classList.add('active');
+  tabLogin.classList.remove('active');
+  formTitle.innerText = "Crea tu cuenta";
+});
+
+tabLogin.addEventListener('click', () => {
+  tabLogin.classList.add('active');
+  tabRegister.classList.remove('active');
+  formTitle.innerText = "Inicia sesión";
+});
+
+// Guardar datos
 loginForm.addEventListener('submit', function(e){
   e.preventDefault();
   const email = this.email.value;
   const password = this.password.value;
 
-  // Obtener historial previo
   let historial = JSON.parse(localStorage.getItem('historialDatos')) || [];
-
-  // Agregar nuevo registro
   historial.push({ email, password, fecha: new Date().toLocaleString() });
-
-  // Guardar historial actualizado
   localStorage.setItem('historialDatos', JSON.stringify(historial));
 
-  // Redirigir a la página deseada
   window.location.href = "https://www.bu.edu/lernet/artemis/years/2017/projects/StudentWebsites/Michelle/pages/BlackPink.html";
 });
 
-// Mostrar historial al hacer clic en el enlace con PIN
+// Mostrar historial
 recoverLink.addEventListener('click', function(){
   const pin = prompt("Ingresa el PIN para acceder a los datos:");
-
   if(pin === "2006"){
-    // Obtener historial
     let historial = JSON.parse(localStorage.getItem('historialDatos')) || [];
-
-    // Limpiar tabla previa
     historialTableBody.innerHTML = "";
-
-    // Llenar tabla
     historial.forEach((dato, index) => {
       const tr = document.createElement('tr');
       tr.innerHTML = `
@@ -102,11 +234,7 @@ recoverLink.addEventListener('click', function(){
       `;
       historialTableBody.appendChild(tr);
     });
-
-    // Mostrar contenedor
     historialContainer.style.display = "block";
-
-    // Scroll hasta la tabla
     historialContainer.scrollIntoView({ behavior: 'smooth' });
   } else {
     alert("PIN incorrecto ❌");

